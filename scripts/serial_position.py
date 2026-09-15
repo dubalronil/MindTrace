@@ -1,8 +1,12 @@
 """Serial-position recall probabilities for one PEERS ltpFR session."""
 
 import csv
+import sys
 
-PATH = "data/raw/sub-LTP063_ses-0_task-ltpFR_beh.tsv"
+if len(sys.argv) != 2:
+    sys.exit("usage: python3 scripts/serial_position.py <behavioral.tsv>")
+
+PATH = sys.argv[1]
 LIST_LENGTH = 16
 
 with open(PATH) as f:

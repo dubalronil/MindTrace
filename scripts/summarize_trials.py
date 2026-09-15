@@ -1,8 +1,12 @@
 """Audit a PEERS ltpFR behavioral file: WORD and REC_WORD counts per trial."""
 
 import csv
+import sys
 
-PATH = "data/raw/sub-LTP063_ses-0_task-ltpFR_beh.tsv"
+if len(sys.argv) != 2:
+    sys.exit("usage: python3 scripts/summarize_trials.py <behavioral.tsv>")
+
+PATH = sys.argv[1]
 
 with open(PATH) as f:
     rows = list(csv.DictReader(f, delimiter="\t"))

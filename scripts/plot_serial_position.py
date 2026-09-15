@@ -1,10 +1,22 @@
 """Plot the serial-position curve for one PEERS ltpFR session."""
 
 import csv
+import os
+import re
+import sys
+
 import matplotlib.pyplot as plt
 
-PATH = "data/raw/sub-LTP063_ses-0_task-ltpFR_beh.tsv"
-OUT = "results/figures/serial_position_LTP063_ses0.png"
+if len(sys.argv) != 2:
+    sys.exit("usage: python3 scripts/plot_serial_position.py <behavioral.tsv>")
+
+PATH = sys.argv[1]
+
+match = re.search(r"sub-([^_]+)_ses-([^_]+)", os.path.basename(PATH))
+if not match:
+    sys.exit(f"cannot read subject/session from filename: {os.path.basename(PATH)}")
+SUBJECT, SESSION = match.group(1), match.group(2)
+OUT = f"results/figures/serial_position_{SUBJECT}_ses{SESSION}.png"
 LIST_LENGTH = 16
 
 with open(PATH) as f:
@@ -44,8 +56,9 @@ ax.set_xlabel("Serial Position")
 ax.set_ylabel("Recall Probability")
 ax.set_ylim(0, 1)
 ax.set_xticks(positions)
-ax.set_title("Serial Position Curve — LTP063, Session 0")
+ax.set_title(f"Serial Position Curve — {SUBJECT}, Session {SESSION}")
 fig.tight_layout()
+os.makedirs(os.path.dirname(OUT), exist_ok=True)
 fig.savefig(OUT, dpi=150)
 print(f"\nSaved {OUT}")
 plt.show()
